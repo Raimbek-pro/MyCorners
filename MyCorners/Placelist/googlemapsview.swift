@@ -8,30 +8,44 @@ import SwiftUI
 import GoogleMaps
 
 struct GoogleMapView: UIViewRepresentable {
-    let latitude: Double
-    let longitude: Double
+    
+    var places : [Place]
+ 
     let zoom: Float
 
     func makeUIView(context: Context) -> GMSMapView {
         // Create options object
+        let initialLocation = places.first?.coordinate ?? CLLocationCoordinate2D(latitude: 43.24, longitude: 76.88)
         let options = GMSMapViewOptions()
-        options.camera = GMSCameraPosition(latitude: latitude, longitude: longitude, zoom: zoom)
+        options.camera = GMSCameraPosition(latitude: initialLocation.latitude, longitude: initialLocation.longitude, zoom: zoom)
         
         // Initialize map using the recommended initializer
         let mapView = GMSMapView(options: options)
         mapView.delegate = context.coordinator
-
-        // Optional: add a default marker
-        let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        marker.title = "Default Location"
-        marker.map = mapView
+        for place in places{
+                       let marker = GMSMarker()
+                       marker.position = place.coordinate
+                       marker.title = place.name
+                       marker.map = mapView
+        }
+     
 
         return mapView
     }
 
     func updateUIView(_ uiView: GMSMapView, context: Context) {
-        // Update markers or camera if needed
+        
+        
+        // Clear previous markers
+             uiView.clear()
+
+             // Add new markers
+             for place in places {
+                 let marker = GMSMarker()
+                 marker.position = place.coordinate
+                 marker.title = place.name
+                 marker.map = uiView
+             }
     }
 
     func makeCoordinator() -> Coordinator {
