@@ -6,9 +6,16 @@
 //
 
 import SwiftUI
+import GoogleMaps
+
 
 @main
 struct MyCornersApp: App {
+    
+    init(){
+        GMSServices.provideAPIKey("") //YOUR_API_KEY
+        
+    }
     var body: some Scene {
         WindowGroup {
             let interactor = PlaceListInteractor()

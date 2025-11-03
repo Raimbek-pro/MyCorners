@@ -11,9 +11,8 @@ struct PlaceListView: View {
     @StateObject var presenter: PlaceListPresenter
 
     var body: some View {
-        List(presenter.places) { place in
-            Text(place.name)
-        }
+        GoogleMapView(latitude: 43.24, longitude: 76.88, zoom: 12)
+                    .edgesIgnoringSafeArea(.all)
         .onAppear { presenter.loadPlaces() }
     }
 }
