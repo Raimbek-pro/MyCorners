@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct Place: Identifiable {
-    let id = UUID()
+    let id: String  // Firestore doc ID
     let name: String
     let coordinate: CLLocationCoordinate2D
 }

@@ -7,20 +7,27 @@
 
 import SwiftUI
 import GoogleMaps
-
+import FirebaseCore
 
 @main
 struct MyCornersApp: App {
     
+    @StateObject private var authViewModel = AuthViewModel()
+    
     init(){
+        FirebaseApp.configure()
         GMSServices.provideAPIKey("") //YOUR_API_KEY
         
     }
     var body: some Scene {
         WindowGroup {
-            let interactor = PlaceListInteractor()
-            let presenter = PlaceListPresenter(interactor: interactor)
-           PlaceListView(presenter: presenter)
+            if authViewModel.isLoggedIn {
+                let interactor = PlaceListInteractor()
+                let presenter = PlaceListPresenter(interactor: interactor)
+                PlaceListView(presenter: presenter)
+            }else{
+                LoginView(authViewModel: authViewModel)
+            }
         }
     }
 }

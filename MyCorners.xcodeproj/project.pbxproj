@@ -8,16 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		6327EA322EB90E86009575B1 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 6327EA312EB90E86009575B1 /* GoogleMaps */; };
+		63497D4B2EBA72630079D682 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63497D4A2EBA72630079D682 /* FirebaseAuth */; };
+		63497D552EBA7F890079D682 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 63497D542EBA7F7D0079D682 /* .gitignore */; };
+		63849EF52EBA663A002C838B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63849EF42EBA663A002C838B /* GoogleService-Info.plist */; };
+		63849EF82EBA6804002C838B /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 63849EF72EBA6804002C838B /* FirebaseCore */; };
+		63849EFA2EBA6804002C838B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 63849EF92EBA6804002C838B /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6327EA122EB7AE6A009575B1 /* MyCorners.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyCorners.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		63497D542EBA7F7D0079D682 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		63849EF42EBA663A002C838B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6327EA142EB7AE6A009575B1 /* MyCorners */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = MyCorners;
+			sourceTree = "<group>";
+		};
+		63497D502EBA76EC0079D682 /* Login */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Login;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -27,7 +39,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63849EF82EBA6804002C838B /* FirebaseCore in Frameworks */,
 				6327EA322EB90E86009575B1 /* GoogleMaps in Frameworks */,
+				63849EFA2EBA6804002C838B /* FirebaseFirestore in Frameworks */,
+				63497D4B2EBA72630079D682 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,8 +52,11 @@
 		6327EA092EB7AE6A009575B1 = {
 			isa = PBXGroup;
 			children = (
+				63497D542EBA7F7D0079D682 /* .gitignore */,
+				63497D502EBA76EC0079D682 /* Login */,
 				6327EA142EB7AE6A009575B1 /* MyCorners */,
 				6327EA132EB7AE6A009575B1 /* Products */,
+				63849EF42EBA663A002C838B /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,10 +85,14 @@
 			);
 			fileSystemSynchronizedGroups = (
 				6327EA142EB7AE6A009575B1 /* MyCorners */,
+				63497D502EBA76EC0079D682 /* Login */,
 			);
 			name = MyCorners;
 			packageProductDependencies = (
 				6327EA312EB90E86009575B1 /* GoogleMaps */,
+				63849EF72EBA6804002C838B /* FirebaseCore */,
+				63849EF92EBA6804002C838B /* FirebaseFirestore */,
+				63497D4A2EBA72630079D682 /* FirebaseAuth */,
 			);
 			productName = MyCorners;
 			productReference = 6327EA122EB7AE6A009575B1 /* MyCorners.app */;
@@ -102,6 +124,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				6327EA302EB90E86009575B1 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				63849EF62EBA6804002C838B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6327EA132EB7AE6A009575B1 /* Products */;
@@ -118,6 +141,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63497D552EBA7F890079D682 /* .gitignore in Resources */,
+				63849EF52EBA663A002C838B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +397,14 @@
 				minimumVersion = 10.4.0;
 			};
 		};
+		63849EF62EBA6804002C838B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -379,6 +412,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6327EA302EB90E86009575B1 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
 			productName = GoogleMaps;
+		};
+		63497D4A2EBA72630079D682 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63849EF62EBA6804002C838B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		63849EF72EBA6804002C838B /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63849EF62EBA6804002C838B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		63849EF92EBA6804002C838B /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63849EF62EBA6804002C838B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

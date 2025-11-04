@@ -1,0 +1,10 @@
+
+# Firebase/Google keys
+GoogleService-Info.plist
+*.xcworkspace
+*.xcuserdata
+*.xcscmblueprint
+
+# Xcode builds
+build/
+DerivedData/
