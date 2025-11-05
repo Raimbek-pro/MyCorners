@@ -8,3 +8,4 @@ GoogleService-Info.plist
 # Xcode builds
 build/
 DerivedData/
+GoogleService-Info.plist
