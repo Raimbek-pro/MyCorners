@@ -18,6 +18,16 @@ final class PlaceListInteractor {
 //                Place(name: "Eva Coffee house", coordinate: CLLocationCoordinate2D(latitude: 43.204591358197, longitude: 76.89871739903094))
 //        ]
 //    }
+    init() {
+        // Test Firestore connection
+        db.collection("places").limit(to: 1).getDocuments { snapshot, error in
+            if let error = error {
+                print("❌ Firestore connection failed: \(error.localizedDescription)")
+            } else {
+                print("✅ Firestore is connected and accessible! (\(snapshot?.documents.count ?? 0) docs fetched)")
+            }
+        }
+    }
     
     private let db = Firestore.firestore()
     

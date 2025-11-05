@@ -14,8 +14,8 @@
             filePath = "MyCorners/Placelist/PlaceListInteractor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
             landmarkName = "addPlace(_:completion:)"
             landmarkType = "7">
          </BreakpointContent>

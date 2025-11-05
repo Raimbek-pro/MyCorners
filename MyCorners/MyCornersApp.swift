@@ -8,6 +8,7 @@
 import SwiftUI
 import GoogleMaps
 import FirebaseCore
+import FirebaseAuth
 
 @main
 struct MyCornersApp: App {
@@ -17,6 +18,12 @@ struct MyCornersApp: App {
     init(){
         FirebaseApp.configure()
         GMSServices.provideAPIKey("") //YOUR_API_KEY
+        
+        if let user = Auth.auth().currentUser {
+               print("✅ User is logged in with UID: \(user.uid)")
+           } else {
+               print("⚠️ No user logged in")
+           }
         
     }
     var body: some Scene {
