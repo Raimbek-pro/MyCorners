@@ -12,7 +12,7 @@ import GooglePlaces
 struct PostPlaceView: View {
     @StateObject var presenter: PostPlacePresenter
     @Environment(\.dismiss) private var dismiss
-    
+    var onFinish: (() -> Void)? // runs when done adding places
     var body: some View {
         VStack(spacing: 16) {
             TextField("Place name", text: $presenter.placeName)
@@ -72,7 +72,9 @@ struct PostPlaceView: View {
         }
         .padding()
         .onChange(of: presenter.didPost) { posted in
-            if posted { dismiss() }
+            if posted { dismiss()
+                onFinish?()
+            }
         }
         .navigationTitle("Add New Place")
     }

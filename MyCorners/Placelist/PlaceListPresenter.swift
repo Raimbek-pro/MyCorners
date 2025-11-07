@@ -21,6 +21,17 @@ final class PlaceListPresenter: ObservableObject {
         self.interactor = interactor
     }
 
+    
+    func createFeedPost(title: String,places: [Place]) {
+           interactor.createFeedPost(title: title, places: places) { error in
+               if let error = error {
+                   print("❌ Failed to create feed post: \(error.localizedDescription)")
+               } else {
+                   print("✅ Feed post created successfully!")
+               }
+           }
+       }
+    
     func loadPlaces() {
           interactor.fetchPlaces { [weak self] places in
               DispatchQueue.main.async {

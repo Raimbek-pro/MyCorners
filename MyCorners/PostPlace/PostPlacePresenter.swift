@@ -15,7 +15,7 @@ final class PostPlacePresenter: ObservableObject {
     @Published var isPosting: Bool = false
     @Published var didPost: Bool = false
     
-    
+    @Published var places: [Place] = []
     @Published var predictions: [GMSAutocompletePrediction] = []
     
     
@@ -42,14 +42,18 @@ final class PostPlacePresenter: ObservableObject {
     
     
     func postPlace() {
+      
         guard let coordinate = coordinate, !placeName.isEmpty else { return }
         isPosting = true
-        let newPlace = NewPlace(name: placeName, coordinate: coordinate)
+        let newPlace = Place(id: UUID().uuidString, name: placeName, coordinate: coordinate)
         
         interactor.addPlace(newPlace) { [weak self] error in
             DispatchQueue.main.async {
                 self?.isPosting = false
-                self?.didPost = (error == nil)
+                if error == nil{
+                    self?.places.append(newPlace)
+                    self?.didPost = true
+                }
             }
         }
     }

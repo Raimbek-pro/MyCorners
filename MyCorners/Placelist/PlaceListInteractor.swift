@@ -32,6 +32,32 @@ final class PlaceListInteractor {
     private let db = Firestore.firestore()
     
     
+    
+    func createFeedPost(title: String, places: [Place], completion: ((Error?) -> Void)? = nil) {
+        guard let userId = AuthManager.shared.currentUserId else { return }
+
+        let feedRef = db.collection("feedPosts").document()
+        let placesData = places.map { [
+            "name": $0.name,
+            "latitude": $0.coordinate.latitude,
+            "longitude": $0.coordinate.longitude
+        ]}
+
+        feedRef.setData([
+            "userId": userId,
+            "title": title,
+            "places": placesData,
+            "timestamp": FieldValue.serverTimestamp()
+        ]) { error in
+            if let error = error {
+                print("❌ Failed to create feed post: \(error)")
+            } else {
+                print("✅ Feed post created with ID: \(feedRef.documentID)")
+            }
+            completion?(error)
+        }
+    }
+    
     func fetchPlaces(completion: @escaping ([Place]) -> Void) {
             db.collection("places").getDocuments { snapshot, error in
                 if let error = error {

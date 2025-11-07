@@ -13,7 +13,7 @@ import CoreLocation
 final class PostPlaceInteractor {
     private let db = Firestore.firestore()
     
-    func addPlace(_ place: NewPlace, completion: @escaping (Error?) -> Void) {
+    func addPlace(_ place: Place, completion: @escaping (Error?) -> Void) {
         guard let userId = AuthManager.shared.currentUserId else {
             completion(NSError(domain: "Auth", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not logged in"]))
             return

@@ -31,11 +31,18 @@ struct MyCornersApp: App {
     }
     var body: some Scene {
         WindowGroup {
+//            if authViewModel.isLoggedIn {
+//                let interactor = PlaceListInteractor()
+//                let presenter = PlaceListPresenter(interactor: interactor)
+//                PlaceListView(presenter: presenter)
+//            }else{
+//                LoginView(authViewModel: authViewModel)
+//            }
             if authViewModel.isLoggedIn {
-                let interactor = PlaceListInteractor()
-                let presenter = PlaceListPresenter(interactor: interactor)
-                PlaceListView(presenter: presenter)
-            }else{
+                let interactor = FeedInteractor()
+                let presenter = FeedPresenter(interactor: interactor)
+                FeedView(presenter: presenter)
+            } else {
                 LoginView(authViewModel: authViewModel)
             }
         }

@@ -16,3 +16,4 @@ func searchPlace(query: String, completion: @escaping ([GMSAutocompletePredictio
     }
 }
 
+
