@@ -7,6 +7,7 @@
 
 import SwiftUI
 import GoogleMaps
+import GooglePlaces
 
 struct PostPlaceView: View {
     @StateObject var presenter: PostPlacePresenter
@@ -18,6 +19,36 @@ struct PostPlaceView: View {
                 .padding()
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(8)
+                .onChange(of: presenter.placeName) { _ in
+                        presenter.searchPlaces()
+                    }
+            if !presenter.predictions.isEmpty {
+                List(presenter.predictions, id: \.placeID) { prediction in
+                    Button(action: {
+                        presenter.placeName = prediction.attributedPrimaryText.string
+                        presenter.predictions.removeAll()
+                        
+                        // Get coordinate for the selected place
+                        let placesClient = GMSPlacesClient.shared()
+                        placesClient.fetchPlace(fromPlaceID: prediction.placeID,
+                                                placeFields: [.coordinate, .name],
+                                                sessionToken: nil) { place, error in
+                            if let coord = place?.coordinate {
+                                presenter.coordinate = coord
+                            }
+                        }
+                    }) {
+                        VStack(alignment: .leading) {
+                            Text(prediction.attributedPrimaryText.string)
+                                .font(.headline)
+                            Text(prediction.attributedSecondaryText?.string ?? "")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+                .frame(maxHeight: 200)
+            }
             
             // Map view for picking location
             GoogleMapPickerView(coordinate: $presenter.coordinate)

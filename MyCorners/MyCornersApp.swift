@@ -9,6 +9,7 @@ import SwiftUI
 import GoogleMaps
 import FirebaseCore
 import FirebaseAuth
+import GooglePlaces
 
 @main
 struct MyCornersApp: App {
@@ -18,6 +19,8 @@ struct MyCornersApp: App {
     init(){
         FirebaseApp.configure()
         GMSServices.provideAPIKey("") //YOUR_API_KEY
+        //Google places
+        GMSPlacesClient.provideAPIKey("")
         
         if let user = Auth.auth().currentUser {
                print("✅ User is logged in with UID: \(user.uid)")
