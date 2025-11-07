@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import CoreLocation
+import GoogleMaps
 
 struct PostPlaceView: View {
     @StateObject var presenter: PostPlacePresenter
@@ -19,10 +19,10 @@ struct PostPlaceView: View {
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(8)
             
-            Button("Use Current Location") {
-                // test coords for now
-                presenter.coordinate = CLLocationCoordinate2D(latitude: 43.238949, longitude: 76.889709)
-            }
+            // Map view for picking location
+            GoogleMapPickerView(coordinate: $presenter.coordinate)
+                .frame(height: 300)
+                .cornerRadius(12)
             
             Button {
                 presenter.postPlace()
@@ -35,7 +35,7 @@ struct PostPlaceView: View {
                 }
             }
             .buttonStyle(.borderedProminent)
-            .disabled(presenter.placeName.isEmpty)
+            .disabled(presenter.placeName.isEmpty || presenter.coordinate == nil)
             
             Spacer()
         }
