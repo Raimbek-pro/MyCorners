@@ -22,15 +22,16 @@ final class PlaceListPresenter: ObservableObject {
     }
 
     
-    func createFeedPost(title: String,places: [Place]) {
-           interactor.createFeedPost(title: title, places: places) { error in
-               if let error = error {
-                   print("❌ Failed to create feed post: \(error.localizedDescription)")
-               } else {
-                   print("✅ Feed post created successfully!")
-               }
-           }
-       }
+    func createFeedPost(title: String, places: [Place], completion: @escaping (String?) -> Void) {
+        interactor.createFeedPost(title: title, places: places) { error, id in
+            if error == nil { completion(id) }
+            else { completion(nil) }
+        }
+    }
+
+    func updateFeedPost(id: String, newPlaces: [Place]) {
+        interactor.updateFeedPost(id: id, newPlaces: newPlaces)
+    }
     
     func loadPlaces() {
           interactor.fetchPlaces { [weak self] places in

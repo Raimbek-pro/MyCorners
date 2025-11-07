@@ -1,39 +1,29 @@
-//
-//  PlaceListInteractor.swift
-//  MyCorners
-//
-//  Created by Райымбек Омаров on 02.11.2025.
-//
 import FirebaseFirestore
 import CoreLocation
 import FirebaseAuth
 import Foundation
 import SwiftUI
 import MapKit
+
 final class PlaceListInteractor {
-//    func fetchPlaces() -> [Place] {
-//        // Simulate fetching from API or DB
-//        return [Place(name: "Raw", coordinate: CLLocationCoordinate2D(latitude: 43.24588318693632, longitude: 76.94285244957808)),
-//                Place(name: "Вася,Блин!", coordinate: CLLocationCoordinate2D(latitude: 43.23810987927416, longitude: 76.93683595389925)),
-//                Place(name: "Eva Coffee house", coordinate: CLLocationCoordinate2D(latitude: 43.204591358197, longitude: 76.89871739903094))
-//        ]
-//    }
+    private let db = Firestore.firestore()
+
     init() {
-        // Test Firestore connection
         db.collection("places").limit(to: 1).getDocuments { snapshot, error in
             if let error = error {
                 print("❌ Firestore connection failed: \(error.localizedDescription)")
             } else {
-                print("✅ Firestore is connected and accessible! (\(snapshot?.documents.count ?? 0) docs fetched)")
+                print("✅ Firestore connected (\(snapshot?.documents.count ?? 0) docs)")
             }
         }
     }
-    
-    private let db = Firestore.firestore()
-    
-    
-    
-    func createFeedPost(title: String, places: [Place], completion: ((Error?) -> Void)? = nil) {
+
+    // MARK: - CREATE a new Feed Post
+    func createFeedPost(
+        title: String,
+        places: [Place],
+        completion: ((Error?, String?) -> Void)? = nil
+    ) {
         guard let userId = AuthManager.shared.currentUserId else { return }
 
         let feedRef = db.collection("feedPosts").document()
@@ -43,61 +33,93 @@ final class PlaceListInteractor {
             "longitude": $0.coordinate.longitude
         ]}
 
-        feedRef.setData([
+        let data: [String: Any] = [
             "userId": userId,
             "title": title,
             "places": placesData,
             "timestamp": FieldValue.serverTimestamp()
-        ]) { error in
+        ]
+
+        feedRef.setData(data) { error in
             if let error = error {
-                print("❌ Failed to create feed post: \(error)")
+                print("❌ Failed to create feed post: \(error.localizedDescription)")
             } else {
                 print("✅ Feed post created with ID: \(feedRef.documentID)")
             }
-            completion?(error)
+            completion?(error, feedRef.documentID)
         }
     }
-    
-    func fetchPlaces(completion: @escaping ([Place]) -> Void) {
-            db.collection("places").getDocuments { snapshot, error in
+
+    // MARK: - UPDATE existing Feed Post (append new places)
+    func updateFeedPost(
+        id: String,
+        newPlaces: [Place],
+        completion: ((Error?) -> Void)? = nil
+    ) {
+        let ref = db.collection("feedPosts").document(id)
+
+        let newPlacesData = newPlaces.map { [
+            "name": $0.name,
+            "latitude": $0.coordinate.latitude,
+            "longitude": $0.coordinate.longitude
+        ]}
+
+        // Get existing places, append new ones, and save
+        ref.getDocument { snapshot, error in
+            if let error = error {
+                print("❌ Failed to fetch feed post: \(error.localizedDescription)")
+                completion?(error)
+                return
+            }
+
+            var existingPlaces = snapshot?["places"] as? [[String: Any]] ?? []
+            existingPlaces.append(contentsOf: newPlacesData)
+
+            ref.updateData(["places": existingPlaces]) { error in
                 if let error = error {
-                    print("❌ Error fetching places: \(error)")
-                    completion([])
-                    return
+                    print("❌ Failed to update feed post: \(error.localizedDescription)")
+                } else {
+                    print("✅ Feed post \(id) updated with \(newPlaces.count) new places")
                 }
-                
-                let places = snapshot?.documents.compactMap { doc -> Place? in
-                    guard
-                        let name = doc["name"] as? String,
-                        let lat = doc["latitude"] as? Double,
-                        let lng = doc["longitude"] as? Double
-                    else { return nil }
-                    
-                    return Place(
-                        id: doc.documentID,
-                        name: name,
-                        coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lng)
-                    )
-                } ?? []
-                
-                completion(places)
+                completion?(error)
             }
         }
-        
+    }
+
+    // MARK: - Fetch Places
+    func fetchPlaces(completion: @escaping ([Place]) -> Void) {
+        db.collection("places").getDocuments { snapshot, error in
+            if let error = error {
+                print("❌ Error fetching places: \(error.localizedDescription)")
+                completion([])
+                return
+            }
+
+            let places = snapshot?.documents.compactMap { doc -> Place? in
+                guard
+                    let name = doc["name"] as? String,
+                    let lat = doc["latitude"] as? Double,
+                    let lng = doc["longitude"] as? Double
+                else { return nil }
+
+                return Place(
+                    id: doc.documentID,
+                    name: name,
+                    coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lng)
+                )
+            } ?? []
+
+            completion(places)
+        }
+    }
+
+    // MARK: - Add Place (directly to collection)
     func addPlace(_ place: Place, completion: ((Error?) -> Void)? = nil) {
-        let ref = db.collection("places").document() // creates a reference with a generated ID
-        
-        
         guard let userId = AuthManager.shared.currentUserId else { return }
-        
-        let placeWithID = Place(
-            id: ref.documentID,
-            name: place.name,
-            coordinate: place.coordinate
-        )
-        
-        
-        
+
+        let ref = db.collection("places").document()
+        let placeWithID = Place(id: ref.documentID, name: place.name, coordinate: place.coordinate)
+
         ref.setData([
             "userId": userId,
             "name": placeWithID.name,
@@ -111,4 +133,5 @@ final class PlaceListInteractor {
             }
             completion?(error)
         }
-    }}
+    }
+}
