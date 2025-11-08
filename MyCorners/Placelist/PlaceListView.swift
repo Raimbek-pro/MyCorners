@@ -34,7 +34,7 @@ struct PlaceListView: View {
                                      }
                 ZStack(alignment: .bottomTrailing) {
                     // Map showing all places
-                    GoogleMapView(places: presenter.places, zoom: 12)
+                    GoogleMapView(places: selectedPlaces, zoom: 12)
                         .edgesIgnoringSafeArea(.all)
                         .onAppear { presenter.loadPlaces() }
 
