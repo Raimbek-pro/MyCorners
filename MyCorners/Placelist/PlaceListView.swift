@@ -28,7 +28,10 @@ struct PlaceListView: View {
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(8)
                     .padding(.horizontal)
-
+                    .onChange(of: title) { newTitle in
+                                         guard let id = feedPostId else { return }
+                                         presenter.updateFeedPostTitle(id: id, newTitle: newTitle)
+                                     }
                 ZStack(alignment: .bottomTrailing) {
                     // Map showing all places
                     GoogleMapView(places: presenter.places, zoom: 12)

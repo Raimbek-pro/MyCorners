@@ -85,6 +85,21 @@ final class PlaceListInteractor {
             }
         }
     }
+    
+    
+    // MARK: - Change title
+    
+    func updateFeedPostTitle(id: String, newTitle: String, completion: ((Error?) -> Void)? = nil) {
+        let ref = db.collection("feedPosts").document(id)
+        ref.updateData(["title": newTitle]) { error in
+            if let error = error {
+                print("❌ Failed to update title: \(error.localizedDescription)")
+            } else {
+                print("✅ Feed post \(id) title updated to '\(newTitle)'")
+            }
+            completion?(error)
+        }
+    }
 
     // MARK: - Fetch Places
     func fetchPlaces(completion: @escaping ([Place]) -> Void) {

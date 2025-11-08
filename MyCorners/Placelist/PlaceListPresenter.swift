@@ -28,6 +28,13 @@ final class PlaceListPresenter: ObservableObject {
             else { completion(nil) }
         }
     }
+    
+    
+    func updateFeedPostTitle(id: String, newTitle: String) {
+        interactor.updateFeedPostTitle(id: id, newTitle: newTitle)
+    }
+    
+    
 
     func updateFeedPost(id: String, newPlaces: [Place]) {
         interactor.updateFeedPost(id: id, newPlaces: newPlaces)
