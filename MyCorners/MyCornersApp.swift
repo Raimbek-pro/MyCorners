@@ -39,9 +39,7 @@ struct MyCornersApp: App {
 //                LoginView(authViewModel: authViewModel)
 //            }
             if authViewModel.isLoggedIn {
-                let interactor = FeedInteractor()
-                let presenter = FeedPresenter(interactor: interactor)
-                FeedView(presenter: presenter)
+                MainTabView(authViewModel: authViewModel)
             } else {
                 LoginView(authViewModel: authViewModel)
             }
