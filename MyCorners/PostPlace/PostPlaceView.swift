@@ -77,5 +77,6 @@ struct PostPlaceView: View {
             }
         }
         .navigationTitle("Add New Place")
+        .toolbar(.hidden, for: .tabBar)
     }
 }

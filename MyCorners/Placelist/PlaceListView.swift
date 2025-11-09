@@ -80,6 +80,7 @@ struct PlaceListView: View {
                 }
             }
             .navigationTitle(title) // syncs with editable title
+            .toolbar(.hidden, for: .tabBar)
         }
     }
 }
