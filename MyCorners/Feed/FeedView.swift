@@ -25,6 +25,9 @@ struct FeedView: View {
                             Text("\(post.places.count) pinned places")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
+                            Text("Created by: \(post.userEmail)") // or username if you fetch it separately
+                                   .font(.subheadline)
+                                   .foregroundColor(.blue)
                         }
                     }
                 }

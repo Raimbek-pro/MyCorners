@@ -36,7 +36,9 @@ final class FeedInteractor {
                         )
                     }
                     
-                    return FeedPost(id: doc.documentID, title: title, places: places)
+                    let userId = doc["userId"] as? String ?? "Unknown"
+                    let userEmail = doc["userEmail"] as? String ?? "Unknown"
+                    return FeedPost(id: doc.documentID, title: title, places: places, userId: userId, userEmail: userEmail)
                 } ?? []
                 
                 completion(posts)

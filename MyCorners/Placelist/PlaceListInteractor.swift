@@ -25,6 +25,9 @@ final class PlaceListInteractor {
         completion: ((Error?, String?) -> Void)? = nil
     ) {
         guard let userId = AuthManager.shared.currentUserId else { return }
+        
+        
+        guard let user = Auth.auth().currentUser else { return }
 
         let feedRef = db.collection("feedPosts").document()
         let placesData = places.map { [
@@ -33,8 +36,13 @@ final class PlaceListInteractor {
             "longitude": $0.coordinate.longitude
         ]}
 
+        
+        
+        
+        
         let data: [String: Any] = [
             "userId": userId,
+            "userEmail": user.email ?? "Unknown",
             "title": title,
             "places": placesData,
             "timestamp": FieldValue.serverTimestamp()
