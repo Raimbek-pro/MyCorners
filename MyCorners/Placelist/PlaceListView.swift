@@ -22,16 +22,15 @@ struct PlaceListView: View {
         NavigationStack {
             VStack {
                 // Editable title at the top
-                TextField("Enter post title", text: $title)
-                    .font(.title2)
-                    .padding(8)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-                    .onChange(of: title) { newTitle in
-                                         guard let id = feedPostId else { return }
-                                         presenter.updateFeedPostTitle(id: id, newTitle: newTitle)
-                                     }
+                TextField("Enter post title", text: $title, onCommit: {
+                    guard let id = feedPostId else { return }
+                    presenter.updateFeedPostTitle(id: id, newTitle: title)
+                })
+                .font(.title2)
+                .padding(8)
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(8)
+                .padding(.horizontal)
                 ZStack(alignment: .bottomTrailing) {
                     // Map showing all places
                     GoogleMapView(places: selectedPlaces, zoom: 12)
