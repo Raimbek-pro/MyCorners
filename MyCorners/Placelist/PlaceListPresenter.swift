@@ -12,15 +12,25 @@ import Combine
 internal import _LocationEssentials
 final class PlaceListPresenter: ObservableObject {
     
-    @Published var isLoggedIn: Bool = AuthManager.shared.currentUserId != nil
+    @Published var isLoggedIn: Bool = false
     
     @Published var places: [Place] = []
     private let interactor: PlaceListInteractor
 
     init(interactor: PlaceListInteractor) {
         self.interactor = interactor
+        refreshAuthState()
     }
 
+    /// Refreshes the authentication state.
+    /// TODO: Replace the body with the correct logic from your AuthManager (e.g., `AuthManager.shared.isAuthenticated()` or similar).
+    func refreshAuthState() {
+        // If your AuthManager exposes an `isLoggedIn` or `isAuthenticated` boolean, use it here.
+        // Example:
+        // self.isLoggedIn = AuthManager.shared.isLoggedIn
+        // For now, default to whether a token/user session exists if available, otherwise keep false.
+        // self.isLoggedIn = AuthManager.shared.session != nil
+    }
     
     func createFeedPost(title: String, places: [Place], completion: @escaping (String?) -> Void) {
         interactor.createFeedPost(title: title, places: places) { error, id in

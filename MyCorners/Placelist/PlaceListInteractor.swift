@@ -24,10 +24,11 @@ final class PlaceListInteractor {
         places: [Place],
         completion: ((Error?, String?) -> Void)? = nil
     ) {
-        guard let userId = AuthManager.shared.currentUserId else { return }
+        guard let userId = Auth.auth().currentUser?.uid else { return }
         
         
         guard let user = Auth.auth().currentUser else { return }
+        let userEmail = user.email ?? "Unknown"
 
         let feedRef = db.collection("feedPosts").document()
         let placesData = places.map { [
@@ -138,7 +139,7 @@ final class PlaceListInteractor {
 
     // MARK: - Add Place (directly to collection)
     func addPlace(_ place: Place, completion: ((Error?) -> Void)? = nil) {
-        guard let userId = AuthManager.shared.currentUserId else { return }
+        guard let userId = Auth.auth().currentUser?.uid else { return }
 
         let ref = db.collection("places").document()
         let placeWithID = Place(id: ref.documentID, name: place.name, coordinate: place.coordinate)

@@ -6,36 +6,54 @@
 //
 
 import FirebaseAuth
+import GoogleSignIn
+import FirebaseCore
 
 class AuthManager {
     static let shared = AuthManager()
     private init() {}
 
-    func signUp(email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if let user = result?.user {
-                completion(.success(user))
-            } else {
-                completion(.failure(error!))
+    // MARK: - Google Sign-In
+    func signInWithGoogle(presenting: UIViewController, completion: @escaping (Result<User, Error>) -> Void) {
+        GIDSignIn.sharedInstance.signIn(withPresenting: presenting) { signInResult, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let signInResult = signInResult else {
+                completion(.failure(NSError(domain: "Auth", code: 0, userInfo: [NSLocalizedDescriptionKey: "Google sign-in result is nil"])) )
+                return
+            }
+
+            // Extract tokens from the result
+            guard let idToken = signInResult.user.idToken?.tokenString else {
+                completion(.failure(NSError(domain: "Auth", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to get ID token"])) )
+                return
+            }
+            let accessToken = signInResult.user.accessToken.tokenString
+
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+            Auth.auth().signIn(with: credential) { result, error in
+                if let user = result?.user {
+                    completion(.success(user))
+                } else if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.failure(NSError(domain: "Auth", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unknown sign-in error"])) )
+                }
             }
         }
     }
-
-    func signIn(email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
-            if let user = result?.user {
-                completion(.success(user))
-            } else {
-                completion(.failure(error!))
-            }
+    
+    
+    // MARK: - Sign Out
+        func signOut() {
+            try? Auth.auth().signOut()
         }
-    }
 
-    func signOut() {
-        try? Auth.auth().signOut()
-    }
-
-    var currentUserId: String? {
-        Auth.auth().currentUser?.uid
-    }
+        // Optional: current user helper
+        var currentUser: User? {
+            Auth.auth().currentUser
+        }
 }
