@@ -46,10 +46,13 @@ final class PlaceListPresenter: ObservableObject {
     
     
     
-    func updateFeedPost(id: String, newPlaces: [Place]) {
-        interactor.updateFeedPost(id: id, newPlaces: newPlaces)
+    func updateFeedPost(id: String, newPlaces: [Place], completion: (() -> Void)? = nil) {
+        interactor.updateFeedPost(id: id, newPlaces: newPlaces) { error in
+            if error == nil {
+                completion?()
+            }
+        }
     }
-    
     func loadPlaces() {
         interactor.fetchPlaces { [weak self] places in
             DispatchQueue.main.async {

@@ -57,7 +57,7 @@ struct PlaceListView: View {
                             if let postId = feedPostId {
                                 presenter.loadPostPlaces(postId: postId)
                             }
-                            selectedPlaces = presenter.places
+                        //    selectedPlaces = presenter.places
                         }
 
                     if showCreateButton {
@@ -67,26 +67,25 @@ struct PlaceListView: View {
                             let postPresenter = PostPlacePresenter(interactor: interactor)
 
                             PostPlaceView(presenter: postPresenter) {
-                                // When user finishes adding places, create feed post
                                 let newPlaces = postPresenter.places
                                 guard !newPlaces.isEmpty else { return }
                                 selectedPlaces.append(contentsOf: postPresenter.places)
-                                
+
                                 if let existingId = feedPostId {
-                                    // ✅ Update existing feed post
-                                    presenter.updateFeedPost(
-                                        id: existingId,
-                                        newPlaces: newPlaces
-                                    )
+                                    presenter.updateFeedPost(id: existingId, newPlaces: newPlaces) {
+                                        // after update completes
+                                        presenter.loadPostPlaces(postId: existingId)
+                                    }
                                 } else {
-                                    // ✅ Create new feed post for the first time
                                     presenter.createFeedPost(title: title, places: newPlaces) { newId in
-                                        feedPostId = newId
+                                        if let id = newId {
+                                            feedPostId = id
+                                            // immediately reflect new places
+                                            selectedPlaces.append(contentsOf: newPlaces)
+                                            presenter.loadPostPlaces(postId: id)
+                                        }
                                     }
                                 }
-//                                if !postPresenter.places.isEmpty {
-//                                    presenter.createFeedPost(title: title, places: postPresenter.places)
-//                                }
                             }
                         }) {
                             Image(systemName: "plus")
