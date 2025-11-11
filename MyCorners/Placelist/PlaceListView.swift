@@ -15,6 +15,17 @@ struct PlaceListView: View {
     
     @State private var feedPostId: String? = nil
     
+    
+    init(title: String,
+          presenter: PlaceListPresenter,
+          showCreateButton: Bool = true,
+          feedPostId: String? = nil) {
+         self._title = State(initialValue: title)
+         self._presenter = StateObject(wrappedValue: presenter)
+         self.showCreateButton = showCreateButton
+         self._feedPostId = State(initialValue: feedPostId)
+     }
+    
     //local tracking of places
     @State private var selectedPlaces: [Place] = []
 
@@ -42,7 +53,12 @@ struct PlaceListView: View {
                     // Map showing all places
                     GoogleMapView(places: selectedPlaces, zoom: 12)
                         .edgesIgnoringSafeArea(.all)
-                        .onAppear { presenter.loadPlaces() }
+                        .onAppear {
+                            if let postId = feedPostId {
+                                presenter.loadPostPlaces(postId: postId)
+                            }
+                            selectedPlaces = presenter.places
+                        }
 
                     if showCreateButton {
                         // Single "add post" button
@@ -84,7 +100,11 @@ struct PlaceListView: View {
                         .padding()
                     }
                 }
+                
             }
+            .onChange(of: presenter.places) { newPlaces in
+                   selectedPlaces = newPlaces
+               }
             .navigationTitle(title) // syncs with editable title
             .toolbar(.hidden, for: .tabBar)
         }

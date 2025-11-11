@@ -17,6 +17,36 @@ final class PlaceListInteractor {
             }
         }
     }
+    
+    
+    
+    //MARK: - fetch post by id
+    
+    
+    func fetchFeedPostById(postId: String, completion: @escaping ([Place]) -> Void) {
+        db.collection("feedPosts").document(postId).getDocument { snapshot, error in
+            if let error = error {
+                print("❌ Failed to fetch post \(postId): \(error.localizedDescription)")
+                completion([])
+                return
+            }
+            
+            guard let data = snapshot?.data(),
+                  let placesData = data["places"] as? [[String: Any]] else {
+                completion([])
+                return
+            }
+            
+            let places = placesData.compactMap { dict -> Place? in
+                guard let name = dict["name"] as? String,
+                      let lat = dict["latitude"] as? Double,
+                      let lng = dict["longitude"] as? Double else { return nil }
+                return Place(id: UUID().uuidString, name: name, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lng))
+            }
+            
+            completion(places)
+        }
+    }
 
     // MARK: - CREATE a new Feed Post
     func createFeedPost(

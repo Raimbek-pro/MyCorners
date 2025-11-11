@@ -7,6 +7,7 @@
 
 
 import Foundation
+import FirebaseAuth
 
 struct FeedPost: Identifiable, Hashable {
     let id: String
@@ -22,4 +23,7 @@ struct FeedPost: Identifiable, Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+    var isOwnedByCurrentUser: Bool {
+          return userId == Auth.auth().currentUser?.uid
+      }
 }

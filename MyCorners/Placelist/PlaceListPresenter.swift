@@ -16,12 +16,12 @@ final class PlaceListPresenter: ObservableObject {
     
     @Published var places: [Place] = []
     private let interactor: PlaceListInteractor
-
+    
     init(interactor: PlaceListInteractor) {
         self.interactor = interactor
         refreshAuthState()
     }
-
+    
     /// Refreshes the authentication state.
     /// TODO: Replace the body with the correct logic from your AuthManager (e.g., `AuthManager.shared.isAuthenticated()` or similar).
     func refreshAuthState() {
@@ -45,18 +45,18 @@ final class PlaceListPresenter: ObservableObject {
     }
     
     
-
+    
     func updateFeedPost(id: String, newPlaces: [Place]) {
         interactor.updateFeedPost(id: id, newPlaces: newPlaces)
     }
     
     func loadPlaces() {
-          interactor.fetchPlaces { [weak self] places in
-              DispatchQueue.main.async {
-                  self?.places = places
-              }
-          }
-      }
+        interactor.fetchPlaces { [weak self] places in
+            DispatchQueue.main.async {
+                self?.places = places
+            }
+        }
+    }
     
     func addPlace(name: String, latitude: Double, longitude: Double) {
         let newPlace = Place(
@@ -64,10 +64,21 @@ final class PlaceListPresenter: ObservableObject {
             name: name,
             coordinate: .init(latitude: latitude, longitude: longitude)
         )
-
+        
         interactor.addPlace(newPlace) { [weak self] error in
             if error == nil {
                 self?.loadPlaces()
             }
         }
-    }}
+    }
+    
+    
+    func loadPostPlaces(postId: String) {
+        interactor.fetchFeedPostById(postId: postId) { [weak self] places in
+            DispatchQueue.main.async {
+                self?.places = places
+            }
+        }
+    }
+    
+}
