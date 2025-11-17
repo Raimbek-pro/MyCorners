@@ -27,9 +27,17 @@ struct ProfileView: View {
                                 .background(Color(.systemBackground))
                             }
                 ) {
+                    
                     // My Posts
-                    ForEach(presenter.myPosts, id: \.id) { post in
-                        NavigationLink(destination: FeedPostMapView(post: post)) {
+                    ForEach(presenter.myPosts) { post in
+                        NavigationLink {
+                            PlaceListView(
+                                title: post.title,
+                                presenter: PlaceListPresenter(interactor: PlaceListInteractor()),
+                                showCreateButton: true,
+                                feedPostId: post.id
+                            )
+                        } label: {
                             Text(post.title)
                         }
                     }

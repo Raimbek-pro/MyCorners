@@ -13,6 +13,9 @@ struct GoogleMapView: UIViewRepresentable {
  
     let zoom: Float
 
+    
+
+    @Binding var focusCoordinate: CLLocationCoordinate2D?
     func makeUIView(context: Context) -> GMSMapView {
         // Create options object
         let initialLocation = places.first?.coordinate ?? CLLocationCoordinate2D(latitude: 43.24, longitude: 76.88)
@@ -46,6 +49,11 @@ struct GoogleMapView: UIViewRepresentable {
                  marker.title = place.name
                  marker.map = uiView
              }
+        
+        if let focus = focusCoordinate {
+              let camera = GMSCameraUpdate.setTarget(focus, zoom: zoom)
+              uiView.animate(with: camera)
+          }
     }
 
     func makeCoordinator() -> Coordinator {

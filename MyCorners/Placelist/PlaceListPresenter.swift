@@ -15,6 +15,9 @@ final class PlaceListPresenter: ObservableObject {
     @Published var isLoggedIn: Bool = false
     
     @Published var places: [Place] = []
+    
+    
+    @Published var focusCoordinate: CLLocationCoordinate2D?
     private let interactor: PlaceListInteractor
     
     init(interactor: PlaceListInteractor) {
@@ -81,6 +84,15 @@ final class PlaceListPresenter: ObservableObject {
             DispatchQueue.main.async {
                 self?.places = places
             }
+        }
+    }
+    
+    
+    
+    //:-MARK:-
+    func focusOnPlace(_ place: Place) {
+        DispatchQueue.main.async {
+            self.focusCoordinate = place.coordinate
         }
     }
     

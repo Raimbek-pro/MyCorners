@@ -76,7 +76,59 @@ struct PostPlaceView: View {
                 onFinish?()
             }
         }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                TabBarManager.shared.hideTabBar()
+            }
+        }
+        .onDisappear {
+            TabBarManager.shared.showTabBar()
+        }
         .navigationTitle("Add New Place")
         .toolbar(.hidden, for: .tabBar)
     }
+    private func hideTabBar() {
+          DispatchQueue.main.async {
+              if let tabBarController = findTabBarController() {
+                  tabBarController.tabBar.isHidden = true
+              }
+          }
+      }
+      
+      private func showTabBar() {
+          DispatchQueue.main.async {
+              if let tabBarController = findTabBarController() {
+                  tabBarController.tabBar.isHidden = false
+              }
+          }
+      }
+      
+      private func findTabBarController() -> UITabBarController? {
+          guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
+              return nil
+          }
+          
+          if let tabBarController = findTabBarController(in: window.rootViewController) {
+              return tabBarController
+          }
+          
+          return nil
+      }
+      
+      private func findTabBarController(in viewController: UIViewController?) -> UITabBarController? {
+          guard let viewController = viewController else { return nil }
+          
+          if let tabBarController = viewController as? UITabBarController {
+              return tabBarController
+          }
+          
+          for childViewController in viewController.children {
+              if let tabBarController = findTabBarController(in: childViewController) {
+                  return tabBarController
+              }
+          }
+          
+          return nil
+      }
 }

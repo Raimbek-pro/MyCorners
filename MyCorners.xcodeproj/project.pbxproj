@@ -19,6 +19,19 @@
 		63F350942EC1F96E00804632 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63F350932EC1F96E00804632 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		638731552EC9014200499E05 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		6327EA122EB7AE6A009575B1 /* MyCorners.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyCorners.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63497D542EBA7F7D0079D682 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
@@ -103,6 +116,7 @@
 				6327EA0E2EB7AE6A009575B1 /* Sources */,
 				6327EA0F2EB7AE6A009575B1 /* Frameworks */,
 				6327EA102EB7AE6A009575B1 /* Resources */,
+				638731552EC9014200499E05 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

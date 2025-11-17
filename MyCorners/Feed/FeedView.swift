@@ -25,28 +25,40 @@ struct FeedView: View {
                     }
                 }
                 .navigationDestination(item: $selectedPost) { post in
+                    
+                    
+                    let interactor = PlaceListInteractor()
+                    let presenter = PlaceListPresenter(interactor: interactor)
                 //    FeedPostMapView(post: post)
                     if post.isOwnedByCurrentUser {
                           // Editable module
-                          let interactor = PlaceListInteractor()
-                          let presenter = PlaceListPresenter(interactor: interactor)
+                      
+                            PlaceListView(
+                                title: post.title,
+                                presenter: presenter,
+                                showCreateButton: true,
+                                feedPostId: post.id // pass the existing post ID
+                            ).toolbar(.hidden, for: .tabBar)
+                        
+                      } else {
+                          // Read-only for others
                           PlaceListView(
                               title: post.title,
                               presenter: presenter,
-                              showCreateButton: true,
+                              showCreateButton: false,
                               feedPostId: post.id // pass the existing post ID
-                          )
-                      } else {
-                          // Read-only for others
-                          FeedPostMapView(post: post)
+                          ).toolbar(.hidden, for: .tabBar)
                       }
                 }
+              
                 .onAppear { presenter.loadFeed() }
 
                 // 👇 Floating "create post" button
                 // Floating "create post" button
                 CreatePostButton()
             }
+           
         }
+        
     }
 }
